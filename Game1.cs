@@ -31,7 +31,7 @@ namespace Summative_Assignment_1_5
             _graphics.PreferredBackBufferWidth = screenWidth;
             _graphics.PreferredBackBufferHeight = screenHeight;
             _graphics.ApplyChanges();
-            //introsRect = new Rectangle();
+            introsRect = new Rectangle(screenWidth, screenHeight, screenWidth, screenHeight);
 
             base.Initialize();
             seconds = 0f;
@@ -81,6 +81,15 @@ namespace Summative_Assignment_1_5
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Transparent);
+            _spriteBatch.Begin();
+
+            if (screen == Screen.intro) 
+            {
+                _spriteBatch.Draw();
+            }
+
+
+            _spriteBatch.End();
 
             // TODO: Add your drawing code here
 
