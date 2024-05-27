@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin IntroText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:IntroText.spritefont
+
 #begin PacManIntro.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -25,7 +32,7 @@
 /processorParam:TextureFormat=Color
 /build:PacManIntro.jpg
 
-#begin PacManIntro2.gif
+#begin PacManIntro2.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,5 +42,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:PacManIntro2.gif
+/build:PacManIntro2.jpg
 

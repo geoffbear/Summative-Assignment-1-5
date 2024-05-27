@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.IO;
 
 namespace Summative_Assignment_1_5
 {
@@ -18,6 +19,9 @@ namespace Summative_Assignment_1_5
         int screenWidth = 500;
         int screenHeight = 400;
         Rectangle introsRect;
+        Texture2D introTexture;
+        SpriteFont introText;
+        Texture2D intro2Texture;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -31,7 +35,7 @@ namespace Summative_Assignment_1_5
             _graphics.PreferredBackBufferWidth = screenWidth;
             _graphics.PreferredBackBufferHeight = screenHeight;
             _graphics.ApplyChanges();
-            introsRect = new Rectangle(screenWidth, screenHeight, screenWidth, screenHeight);
+            introsRect = new Rectangle(0, 0, screenWidth, screenHeight);
 
             base.Initialize();
             seconds = 0f;
@@ -41,7 +45,9 @@ namespace Summative_Assignment_1_5
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            introTexture = Content.Load<Texture2D>("PacManIntro");
+            introText = Content.Load<SpriteFont>("IntroText");
+            intro2Texture = Content.Load<Texture2D>("PacManIntro2");
             // TODO: use this.Content to load your game content here
         }
 
@@ -85,9 +91,15 @@ namespace Summative_Assignment_1_5
 
             if (screen == Screen.intro) 
             {
-                _spriteBatch.Draw();
+                _spriteBatch.Draw(introTexture, introsRect, Color.White);
+                _spriteBatch.DrawString(introText, ("Click Enter to continue"), new Vector2 (10, 100), Color.White);
             }
 
+            if (screen == Screen.intro2)
+            {
+                _spriteBatch.Draw(intro2Texture, introsRect, Color.White);
+            }
+            
 
             _spriteBatch.End();
 
