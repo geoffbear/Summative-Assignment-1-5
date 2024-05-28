@@ -56,7 +56,6 @@ namespace Summative_Assignment_1_5
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             keyState = Keyboard.GetState();
-            seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (screen == Screen.intro)
             {
