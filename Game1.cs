@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
@@ -18,10 +19,12 @@ namespace Summative_Assignment_1_5
         Screen screen;
         int screenWidth = 500;
         int screenHeight = 400;
-        Rectangle introsRect;
-        Texture2D introTexture;
+        Rectangle introsRect, pacManRect, msPacManRect;
+        Texture2D introTexture, intro2Texture, pacManTexture, msPacManTexture;
         SpriteFont introText;
-        Texture2D intro2Texture;
+        SoundEffect introMusic;
+        SoundEffectInstance introMusicInstance;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -36,7 +39,8 @@ namespace Summative_Assignment_1_5
             _graphics.PreferredBackBufferHeight = screenHeight;
             _graphics.ApplyChanges();
             introsRect = new Rectangle(0, 0, screenWidth, screenHeight);
-
+            pacManRect = new Rectangle(0, , 10, 10);
+            msPacManRect = new Rectangle(100, 100, 258, 281);
             base.Initialize();
             seconds = 0f;
 
@@ -48,6 +52,11 @@ namespace Summative_Assignment_1_5
             introTexture = Content.Load<Texture2D>("PacManIntro");
             introText = Content.Load<SpriteFont>("IntroText");
             intro2Texture = Content.Load<Texture2D>("PacManIntro2");
+            introMusic = Content.Load<SoundEffect>("PacManMusic");
+            pacManTexture = Content.Load<Texture2D>("PacMan");
+            msPacManTexture = Content.Load<Texture2D>("MsPacMan");
+            introMusicInstance = introMusic.CreateInstance();
+            introMusicInstance.IsLooped = true;
             // TODO: use this.Content to load your game content here
         }
 
@@ -55,6 +64,7 @@ namespace Summative_Assignment_1_5
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            prevKeyState = keyState;
             keyState = Keyboard.GetState();
 
             if (screen == Screen.intro)
@@ -62,12 +72,22 @@ namespace Summative_Assignment_1_5
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
                 {
                     screen = Screen.intro2;
+                    
                 }
             }
 
-            if (screen == Screen.intro2 && seconds == 15f) 
-                screen = Screen.animation;
+            if (screen == Screen.intro2)
+            {
+                seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (seconds > 5f)
+                {
+                    seconds = 0f;
+                    screen = Screen.animation;
+                    introMusicInstance.Play();
+                }
+                
 
+            }
 
             if (screen == Screen.animation)
             {
@@ -97,6 +117,12 @@ namespace Summative_Assignment_1_5
             if (screen == Screen.intro2)
             {
                 _spriteBatch.Draw(intro2Texture, introsRect, Color.White);
+            }
+            
+            if (screen == Screen.animation)
+            {
+                _spriteBatch.Draw(pacManTexture, pacManRect, Color.White);
+                _spriteBatch.Draw(msPacManTexture, msPacManRect, Color.White);
             }
             
 
