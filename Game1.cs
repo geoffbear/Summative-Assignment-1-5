@@ -39,7 +39,7 @@ namespace Summative_Assignment_1_5
             _graphics.PreferredBackBufferHeight = screenHeight;
             _graphics.ApplyChanges();
             introsRect = new Rectangle(0, 0, screenWidth, screenHeight);
-            pacManRect = new Rectangle(0, , 10, 10);
+            pacManRect = new Rectangle(0, 0, 10, 10);
             msPacManRect = new Rectangle(100, 100, 258, 281);
             base.Initialize();
             seconds = 0f;
