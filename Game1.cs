@@ -18,12 +18,12 @@ namespace Summative_Assignment_1_5
         KeyboardState keyState, prevKeyState;
         Screen screen;
         int screenWidth = 500, screenHeight = 400;
-        Rectangle introsRect, pacManRect, msPacManRect;
-        Texture2D introTexture, intro2Texture, pacManTexture, msPacManTexture;
+        Rectangle introsRect, pacManRect, msPacManRect, heartRect;
+        Texture2D introTexture, intro2Texture, pacManTexture, msPacManTexture, heartTexture;
         SpriteFont introText;
         SoundEffect introMusic;
         SoundEffectInstance introMusicInstance;
-        bool stop = true;
+        bool kiss = true;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -40,6 +40,7 @@ namespace Summative_Assignment_1_5
             introsRect = new Rectangle(0, 0, screenWidth, screenHeight);
             pacManRect = new Rectangle(1, 200, 100, 100);
             msPacManRect = new Rectangle(400, 200, 100, 100);
+            heartRect = new Rectangle(200, 100, 100, 100);
             base.Initialize();
             seconds = 0f;
 
@@ -54,6 +55,7 @@ namespace Summative_Assignment_1_5
             introMusic = Content.Load<SoundEffect>("PacManMusic");
             pacManTexture = Content.Load<Texture2D>("PacManImage");
             msPacManTexture = Content.Load<Texture2D>("MsPacMan");
+            heartTexture = Content.Load<Texture2D>("PacManHeart");
             introMusicInstance = introMusic.CreateInstance();
             introMusicInstance.IsLooped = true;
             // TODO: use this.Content to load your game content here
@@ -88,14 +90,14 @@ namespace Summative_Assignment_1_5
 
             }
 
-            if (screen == Screen.animation && stop)
+            if (screen == Screen.animation && kiss)
             {
                 pacManRect.X += 2;
                 msPacManRect.X -= 2;
                 
                 if (pacManRect.X >= 150 && msPacManRect.X <= 251)
                 {
-                    stop = false;
+                    kiss = false;
                     pacManRect.X = 150;
                     msPacManRect.X = 251;
                 }
@@ -130,6 +132,10 @@ namespace Summative_Assignment_1_5
             if (screen == Screen.animation)
             {
                 GraphicsDevice.Clear(Color.White);
+                if (!kiss)
+                {
+                    _spriteBatch.Draw(heartTexture, heartRect, Color.White);
+                }
                 _spriteBatch.Draw(pacManTexture, pacManRect, Color.White);
                 _spriteBatch.Draw(msPacManTexture, msPacManRect, Color.White);
             }
