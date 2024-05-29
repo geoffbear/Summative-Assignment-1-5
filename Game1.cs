@@ -17,14 +17,13 @@ namespace Summative_Assignment_1_5
         float seconds;
         KeyboardState keyState, prevKeyState;
         Screen screen;
-        int screenWidth = 500;
-        int screenHeight = 400;
+        int screenWidth = 500, screenHeight = 400;
         Rectangle introsRect, pacManRect, msPacManRect;
         Texture2D introTexture, intro2Texture, pacManTexture, msPacManTexture;
         SpriteFont introText;
         SoundEffect introMusic;
         SoundEffectInstance introMusicInstance;
-
+        bool stop = true;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -39,8 +38,8 @@ namespace Summative_Assignment_1_5
             _graphics.PreferredBackBufferHeight = screenHeight;
             _graphics.ApplyChanges();
             introsRect = new Rectangle(0, 0, screenWidth, screenHeight);
-            pacManRect = new Rectangle(0, 0, 10, 10);
-            msPacManRect = new Rectangle(100, 100, 258, 281);
+            pacManRect = new Rectangle(1, 200, 100, 100);
+            msPacManRect = new Rectangle(400, 200, 100, 100);
             base.Initialize();
             seconds = 0f;
 
@@ -53,7 +52,7 @@ namespace Summative_Assignment_1_5
             introText = Content.Load<SpriteFont>("IntroText");
             intro2Texture = Content.Load<Texture2D>("PacManIntro2");
             introMusic = Content.Load<SoundEffect>("PacManMusic");
-            pacManTexture = Content.Load<Texture2D>("PacMan");
+            pacManTexture = Content.Load<Texture2D>("PacManImage");
             msPacManTexture = Content.Load<Texture2D>("MsPacMan");
             introMusicInstance = introMusic.CreateInstance();
             introMusicInstance.IsLooped = true;
@@ -89,8 +88,17 @@ namespace Summative_Assignment_1_5
 
             }
 
-            if (screen == Screen.animation)
+            if (screen == Screen.animation && stop)
             {
+                pacManRect.X += 2;
+                msPacManRect.X -= 2;
+                
+                if (pacManRect.X >= 150 && msPacManRect.X <= 251)
+                {
+                    stop = false;
+                    pacManRect.X = 150;
+                    msPacManRect.X = 251;
+                }
 
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
                 {
@@ -121,6 +129,7 @@ namespace Summative_Assignment_1_5
             
             if (screen == Screen.animation)
             {
+                GraphicsDevice.Clear(Color.White);
                 _spriteBatch.Draw(pacManTexture, pacManRect, Color.White);
                 _spriteBatch.Draw(msPacManTexture, msPacManRect, Color.White);
             }
