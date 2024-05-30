@@ -23,7 +23,7 @@ namespace Summative_Assignment_1_5
         SpriteFont introText;
         SoundEffect introMusic;
         SoundEffectInstance introMusicInstance;
-        bool kiss = true;
+        bool kiss = false;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -90,16 +90,32 @@ namespace Summative_Assignment_1_5
 
             }
 
-            if (screen == Screen.animation && kiss)
+            if (screen == Screen.animation)
             {
-                pacManRect.X += 2;
-                msPacManRect.X -= 2;
-                
-                if (pacManRect.X >= 150 && msPacManRect.X <= 251)
+                seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (!kiss)
                 {
-                    kiss = false;
-                    pacManRect.X = 150;
-                    msPacManRect.X = 251;
+                    pacManRect.X += 2;
+                    msPacManRect.X -= 2;
+
+                    if (pacManRect.X >= 150 && msPacManRect.X <= 251)
+                    {
+                        kiss = true;
+                        seconds = 0f;
+                        
+                    }
+                }
+
+                if (kiss && seconds >= 2f)
+                {
+                    pacManRect.X -= 2;
+                    msPacManRect.X += 2;
+                    
+                    if (pacManRect.X <= 125 && msPacManRect.X >= 275)
+                    {
+                        pacManRect.X = 125;
+                        msPacManRect.X = 275;
+                    }
                 }
 
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
@@ -132,7 +148,7 @@ namespace Summative_Assignment_1_5
             if (screen == Screen.animation)
             {
                 GraphicsDevice.Clear(Color.White);
-                if (!kiss)
+                if (kiss)
                 {
                     _spriteBatch.Draw(heartTexture, heartRect, Color.White);
                 }
@@ -140,6 +156,10 @@ namespace Summative_Assignment_1_5
                 _spriteBatch.Draw(msPacManTexture, msPacManRect, Color.White);
             }
             
+            if (screen == Screen.credits)
+            {
+
+            }
 
             _spriteBatch.End();
 
