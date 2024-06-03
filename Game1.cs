@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
+using System.Threading;
 
 namespace Summative_Assignment_1_5
 {
@@ -23,7 +24,10 @@ namespace Summative_Assignment_1_5
         SpriteFont introText;
         SoundEffect introMusic;
         SoundEffectInstance introMusicInstance;
-        bool kiss = false;
+        bool kiss = false, jump = false, text = false;
+        int pacManJumpSpeed;
+        int msPacManJumpSpeed;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -41,6 +45,8 @@ namespace Summative_Assignment_1_5
             pacManRect = new Rectangle(1, 200, 100, 100);
             msPacManRect = new Rectangle(400, 200, 100, 100);
             heartRect = new Rectangle(200, 100, 100, 100);
+            pacManJumpSpeed = -4;
+            msPacManJumpSpeed -= 3;
             base.Initialize();
             seconds = 0f;
 
@@ -73,7 +79,6 @@ namespace Summative_Assignment_1_5
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
                 {
                     screen = Screen.intro2;
-                    
                 }
             }
 
@@ -102,31 +107,50 @@ namespace Summative_Assignment_1_5
                     {
                         kiss = true;
                         seconds = 0f;
-                        
                     }
                 }
 
-                if (kiss && seconds >= 2f)
+                if (kiss && seconds >= 2f && !jump)
                 {
                     pacManRect.X -= 2;
                     msPacManRect.X += 2;
                     
-                    if (pacManRect.X <= 125 && msPacManRect.X >= 275)
+                    if (pacManRect.X <= 50 && msPacManRect.X >= 350)
                     {
-                        pacManRect.X = 125;
-                        msPacManRect.X = 275;
+                        pacManRect.X = 50;
+                        msPacManRect.X = 350;
+                        jump = true;
+                    }
+                }
+
+                if (jump)
+                {
+                    pacManRect.Y += pacManJumpSpeed;
+
+                    if (pacManRect.Y < 60 || pacManRect.Y > 200)
+                        pacManJumpSpeed *= -1;
+
+                   msPacManRect.Y += msPacManJumpSpeed;
+                    if (msPacManRect.Y < 60 || msPacManRect.Y > 200)
+                        msPacManJumpSpeed *= -1;
+                    seconds = 0f;
+                    seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (seconds >= 3f)
+                    {
+                        text = true;
                     }
                 }
 
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
                 {
-
+                    screen = Screen.credits;
                 }
 
             }
-                // TODO: Add your update logic here
+            // TODO: Add your update logic here
 
-                base.Update(gameTime);
+            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -154,6 +178,11 @@ namespace Summative_Assignment_1_5
                 }
                 _spriteBatch.Draw(pacManTexture, pacManRect, Color.White);
                 _spriteBatch.Draw(msPacManTexture, msPacManRect, Color.White);
+
+                if (text)
+                {
+                    _spriteBatch.DrawString(introText, ("Click Enter to continue"), new Vector2(10, 100), Color.Black);
+                }
             }
             
             if (screen == Screen.credits)
