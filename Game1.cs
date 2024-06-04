@@ -140,7 +140,6 @@ namespace Summative_Assignment_1_5
                     {
                         text = true;
                     }
-                }
 
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
                 {
