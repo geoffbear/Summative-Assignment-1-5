@@ -18,13 +18,14 @@ namespace Summative_Assignment_1_5
         float seconds;
         KeyboardState keyState, prevKeyState;
         Screen screen;
-        int screenWidth = 500, screenHeight = 400, pacManJumpSpeed, msPacManJumpSpeed, creditScroll;
+        int screenWidth = 500, screenHeight = 400, pacManJumpSpeed, msPacManJumpSpeed;
         Rectangle introsRect, pacManRect, msPacManRect, heartRect;
         Texture2D introTexture, intro2Texture, pacManTexture, msPacManTexture, heartTexture;
         SpriteFont introText, AniText, creditText;
         SoundEffect introMusic;
         SoundEffectInstance introMusicInstance;
         bool kiss = false, jump = false, text = false;
+        Vector2 textLocation;
 
         public Game1()
         {
@@ -45,7 +46,7 @@ namespace Summative_Assignment_1_5
             heartRect = new Rectangle(200, 100, 100, 100);
             pacManJumpSpeed = -4;
             msPacManJumpSpeed -= 3;
-            creditScroll += 2;
+            textLocation = new Vector2(75, 0);
             base.Initialize();
             seconds = 0f;
 
@@ -146,14 +147,19 @@ namespace Summative_Assignment_1_5
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
                 {
                     screen = Screen.credits;
+                    seconds = 0f;
                 }
 
-                if (screen == Screen.credits)
-                {
-                    
-                    introMusicInstance.Stop();
-                }
+            }
 
+            if (screen == Screen.credits)
+            {
+                seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                textLocation.Y += 1;
+                introMusicInstance.Stop();
+
+                if (seconds >= 8f)
+                    Exit();
             }
             // TODO: Add your update logic here
 
@@ -188,14 +194,14 @@ namespace Summative_Assignment_1_5
 
                 if (text)
                 {
-                    _spriteBatch.DrawString(AniText, ("Click Enter to continue"), new Vector2(10, 100), Color.Black);
+                    _spriteBatch.DrawString(AniText, ("Click Enter to continue"), new Vector2(0, 0), Color.Black);
                 }
             }
 
             if (screen == Screen.credits)
             {
                 GraphicsDevice.Clear(Color.Black);
-                _spriteBatch.DrawString(creditText, ("Prologue: Mr. and Ms. Pac Man started a family together.\n\n... And they lived happily ever after.\n\n The End! Thanks for watching.\n\n Photos credits: The Internet \n\nGoodbye"), new Vector2(75, 0), Color.Yellow);
+                _spriteBatch.DrawString(creditText, ("Prologue: Mr. and Ms. Pac Man started a family together.\n\n... And they lived happily ever after.\n\n The End! Thanks for watching.\n\n Photos credits: The Internet \n\nGoodbye"), textLocation, Color.Yellow);
             }
 
             _spriteBatch.End();
