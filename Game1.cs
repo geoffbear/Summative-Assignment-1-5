@@ -18,15 +18,13 @@ namespace Summative_Assignment_1_5
         float seconds;
         KeyboardState keyState, prevKeyState;
         Screen screen;
-        int screenWidth = 500, screenHeight = 400;
+        int screenWidth = 500, screenHeight = 400, pacManJumpSpeed, msPacManJumpSpeed, creditScroll;
         Rectangle introsRect, pacManRect, msPacManRect, heartRect;
         Texture2D introTexture, intro2Texture, pacManTexture, msPacManTexture, heartTexture;
-        SpriteFont introText;
+        SpriteFont introText, AniText, creditText;
         SoundEffect introMusic;
         SoundEffectInstance introMusicInstance;
         bool kiss = false, jump = false, text = false;
-        int pacManJumpSpeed;
-        int msPacManJumpSpeed;
 
         public Game1()
         {
@@ -47,6 +45,7 @@ namespace Summative_Assignment_1_5
             heartRect = new Rectangle(200, 100, 100, 100);
             pacManJumpSpeed = -4;
             msPacManJumpSpeed -= 3;
+            creditScroll += 2;
             base.Initialize();
             seconds = 0f;
 
@@ -62,6 +61,8 @@ namespace Summative_Assignment_1_5
             pacManTexture = Content.Load<Texture2D>("PacManImage");
             msPacManTexture = Content.Load<Texture2D>("MsPacMan");
             heartTexture = Content.Load<Texture2D>("PacManHeart");
+            AniText = Content.Load<SpriteFont>("AniText");
+            creditText = Content.Load<SpriteFont>("Credits");
             introMusicInstance = introMusic.CreateInstance();
             introMusicInstance.IsLooped = true;
             // TODO: use this.Content to load your game content here
@@ -124,26 +125,33 @@ namespace Summative_Assignment_1_5
                 }
 
                 if (jump)
-                {
+                { 
                     pacManRect.Y += pacManJumpSpeed;
+                    msPacManRect.Y += msPacManJumpSpeed;
 
                     if (pacManRect.Y < 60 || pacManRect.Y > 200)
                         pacManJumpSpeed *= -1;
 
-                   msPacManRect.Y += msPacManJumpSpeed;
+                   
                     if (msPacManRect.Y < 60 || msPacManRect.Y > 200)
-                        msPacManJumpSpeed *= -1;
-                    seconds = 0f;
-                    seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                    if (seconds >= 3f)
                     {
-                        text = true;
+                        msPacManJumpSpeed *= -1;
+                        jump = false;
                     }
+
+                    if (!jump)
+                        text = true;
+                }
 
                 if (keyState.IsKeyDown(Keys.Enter) && prevKeyState.IsKeyDown(Keys.Enter))
                 {
                     screen = Screen.credits;
+                }
+
+                if (screen == Screen.credits)
+                {
+                    
+                    introMusicInstance.Stop();
                 }
 
             }
@@ -180,13 +188,14 @@ namespace Summative_Assignment_1_5
 
                 if (text)
                 {
-                    _spriteBatch.DrawString(introText, ("Click Enter to continue"), new Vector2(10, 100), Color.Black);
+                    _spriteBatch.DrawString(AniText, ("Click Enter to continue"), new Vector2(10, 100), Color.Black);
                 }
             }
-            
+
             if (screen == Screen.credits)
             {
-
+                GraphicsDevice.Clear(Color.Black);
+                _spriteBatch.DrawString(creditText, ("Prologue: Mr. and Ms. Pac Man started a family together.\n\n... And they lived happily ever after.\n\n The End! Thanks for watching.\n\n Photos credits: The Internet \n\nGoodbye"), new Vector2(75, 0), Color.Yellow);
             }
 
             _spriteBatch.End();
